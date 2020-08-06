@@ -28,6 +28,10 @@ public class IntegralController {
         return redisUtils.zResverseRangeWithScore(RedisKeyConstants.INTEGRAL_SORT_KEY, 1, 10);
     }
 
+    /**
+     * 遗留问题：分数相同的话根据什么排序
+     * @return
+     */
     @GetMapping("getRank")
     public Long getRank() {
         return redisUtils.zResverseRank(RedisKeyConstants.INTEGRAL_SORT_KEY, "556358") + 1;

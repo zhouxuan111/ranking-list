@@ -142,4 +142,18 @@ public class RedisUtils {
         return redisTemplate.opsForZSet().score(key, value);
     }
 
+    /**
+     * 查询某一元素是否在集合中存在
+     * @param key
+     * @param value
+     * @return
+     */
+    public boolean isMember(String key, String value) {
+        Double score = redisTemplate.opsForZSet().score(key, value);
+        if (null == score) {
+            return false;
+        }
+        return true;
+
+    }
 }
