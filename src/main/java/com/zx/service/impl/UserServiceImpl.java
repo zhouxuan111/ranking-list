@@ -43,4 +43,12 @@ public class UserServiceImpl implements UserService {
         redisUtils.zadd(RedisKeyConstants.INTEGRAL_SORT_KEY, user.getUserId(), user.getScore());
 
     }
+
+    @Override
+    public User selectByUserId(String userId) {
+        if (userId == null) {
+            return null;
+        }
+        return userDao.selectByUserId(userId);
+    }
 }

@@ -3,6 +3,8 @@ package com.zx.controller;
 import java.util.Set;
 
 import com.zx.constant.RedisKeyConstants;
+import com.zx.model.User;
+import com.zx.service.UserService;
 import com.zx.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -19,6 +21,9 @@ public class IntegralController {
     @Autowired
     private RedisUtils redisUtils;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 获取前10
      * @return
@@ -34,6 +39,13 @@ public class IntegralController {
      */
     @GetMapping("getRank")
     public Long getRank() {
-        return redisUtils.zResverseRank(RedisKeyConstants.INTEGRAL_SORT_KEY, "556358") + 1;
+        String userId = "556358";
+        //如果在缓存中不存在
+        if (!redisUtils.isMember(RedisKeyConstants.INTEGRAL_SORT_KEY, userId)) {
+            //从数据库查询 存放到缓存中
+            User user = userService.selectByUserId(userId);
+            redisUtils.zadd(RedisKeyConstants.INTEGRAL_SORT_KEY, userId, user.getScore());
+        }
+        return redisUtils.zResverseRank(RedisKeyConstants.INTEGRAL_SORT_KEY, "") + 1;
     }
 }
