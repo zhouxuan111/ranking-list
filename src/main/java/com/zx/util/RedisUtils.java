@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class RedisUtils {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /*------------针对zset(有序集合)数据类型的操作-----------*/
 
@@ -27,8 +27,7 @@ public class RedisUtils {
      * @param score
      * @return
      */
-    public boolean zadd(String key, String value, double score) {
-
+    public boolean zadd(String key, Object value, double score) {
         return redisTemplate.opsForZSet().add(key, value, score);
 
     }
@@ -39,7 +38,7 @@ public class RedisUtils {
      * @param values
      * @return
      */
-    public Long zadd(String key, Set<ZSetOperations.TypedTuple> values) {
+    public Long zadd(String key, Set<ZSetOperations.TypedTuple<Object>> values) {
         return redisTemplate.opsForZSet().add(key, values);
     }
 
@@ -95,7 +94,8 @@ public class RedisUtils {
      * @param end ：结束位置 -1查询所有
      * @return 只返回value集合
      */
-    public Set<String> zRange(String key, long start, long end) {
+    public Set<Object> zRange(String key, long start, long end) {
+
         return redisTemplate.opsForZSet().range(key, start, end);
     }
 
@@ -106,7 +106,7 @@ public class RedisUtils {
      * @param end：结束位置 -1获取所有
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<String>> zRangeWithScore(String key, long start, long end) {
+    public Set<ZSetOperations.TypedTuple<Object>> zRangeWithScore(String key, long start, long end) {
         return redisTemplate.opsForZSet().rangeWithScores(key, start, end);
     }
 
@@ -117,7 +117,7 @@ public class RedisUtils {
      * @param end ：结束位置 -1查询所有
      * @return 只返回value集合
      */
-    public Set<String> zResverseRange(String key, long start, long end) {
+    public Set<Object> zResverseRange(String key, long start, long end) {
         return redisTemplate.opsForZSet().reverseRange(key, start, end);
     }
 
@@ -128,7 +128,7 @@ public class RedisUtils {
      * @param end：结束位置 -1获取所有
      * @return
      */
-    public Set<ZSetOperations.TypedTuple<String>> zResverseRangeWithScore(String key, long start, long end) {
+    public Set<ZSetOperations.TypedTuple<Object>> zResverseRangeWithScore(String key, long start, long end) {
         return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
     }
 

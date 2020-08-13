@@ -33,16 +33,15 @@ public class IntegralController {
     @GetMapping("getTopTen")
     public List<User> top10() {
         long start = System.currentTimeMillis();
-        System.out.println();
         List<User> users = new ArrayList<>();
 
-        Set<ZSetOperations.TypedTuple<String>> tupleSet = redisUtils
-                .zResverseRangeWithScore(RedisKeyConstants.INTEGRAL_SORT_KEY, 9000, 10000);
+        Set<ZSetOperations.TypedTuple<Object>> tupleSet = redisUtils
+                .zResverseRangeWithScore(RedisKeyConstants.INTEGRAL_SORT_KEY, 1, 10000);
         System.out.println(System.currentTimeMillis() - start);
 
-        for (ZSetOperations.TypedTuple<String> a : tupleSet) {
+        for (ZSetOperations.TypedTuple<Object> a : tupleSet) {
             User user = new User();
-            user.setUserId(a.getValue());
+            user.setUserId(a.getValue().toString());
 
             user.setScore(Integer.valueOf(String.valueOf(a.getScore()).split("\\.")[ 0 ]));
             users.add(user);

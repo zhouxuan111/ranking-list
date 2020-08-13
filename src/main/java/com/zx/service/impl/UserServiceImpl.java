@@ -29,7 +29,6 @@ public class UserServiceImpl implements UserService {
         //加入缓存
         if (!user.getScore().equals(0)) {
             double score = ScoreUtil.getScore(user.getScore(), new Date());
-            System.out.println(score);
             redisUtils.zadd(RedisKeyConstants.INTEGRAL_SORT_KEY, user.getUserId(), score);
         }
     }
