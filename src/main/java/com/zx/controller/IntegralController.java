@@ -1,5 +1,7 @@
 package com.zx.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import com.zx.constant.RedisKeyConstants;
@@ -29,8 +31,23 @@ public class IntegralController {
      * @return
      */
     @GetMapping("getTopTen")
-    public Set<ZSetOperations.TypedTuple<String>> top10() {
-        return redisUtils.zResverseRangeWithScore(RedisKeyConstants.INTEGRAL_SORT_KEY, 1, 10);
+    public List<User> top10() {
+        long start = System.currentTimeMillis();
+        System.out.println();
+        List<User> users = new ArrayList<>();
+
+        Set<ZSetOperations.TypedTuple<String>> tupleSet = redisUtils
+                .zResverseRangeWithScore(RedisKeyConstants.INTEGRAL_SORT_KEY, 9000, 10000);
+        System.out.println(System.currentTimeMillis() - start);
+
+        for (ZSetOperations.TypedTuple<String> a : tupleSet) {
+            User user = new User();
+            user.setUserId(a.getValue());
+
+            user.setScore(Integer.valueOf(String.valueOf(a.getScore()).split("\\.")[ 0 ]));
+            users.add(user);
+        }
+        return users;
     }
 
     /**
@@ -46,6 +63,6 @@ public class IntegralController {
             User user = userService.selectByUserId(userId);
             redisUtils.zadd(RedisKeyConstants.INTEGRAL_SORT_KEY, userId, user.getScore());
         }
-        return redisUtils.zResverseRank(RedisKeyConstants.INTEGRAL_SORT_KEY, "") + 1;
+        return redisUtils.zResverseRank(RedisKeyConstants.INTEGRAL_SORT_KEY, userId) + 1;
     }
 }
