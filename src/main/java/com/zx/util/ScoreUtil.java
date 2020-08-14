@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class ScoreUtil {
 
-    private static Date end = new Date(1597303273227L);
+    private static Date end = new Date(1599303273227L);
 
     public static double getScore(Integer score, Date start) {
 
@@ -20,5 +20,5 @@ public class ScoreUtil {
 
         return Double.valueOf(s);
     }
-    
+
 }

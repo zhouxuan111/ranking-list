@@ -36,7 +36,7 @@ public class IntegralController {
         List<User> users = new ArrayList<>();
 
         Set<ZSetOperations.TypedTuple<Object>> tupleSet = redisUtils
-                .zResverseRangeWithScore(RedisKeyConstants.INTEGRAL_SORT_KEY, 1, 10000);
+                .zResverseRangeWithScore(RedisKeyConstants.INTEGRAL_SORT_KEY, 1, 10);
         System.out.println(System.currentTimeMillis() - start);
 
         for (ZSetOperations.TypedTuple<Object> a : tupleSet) {
