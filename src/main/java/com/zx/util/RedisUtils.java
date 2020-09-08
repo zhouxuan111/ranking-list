@@ -1,6 +1,7 @@
 package com.zx.util;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -154,6 +155,14 @@ public class RedisUtils {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 给zset的数据类型设置过期时间
+     * @param key
+     */
+    public void expire(String key) {
+        redisTemplate.boundZSetOps(key).expire(20000, TimeUnit.MILLISECONDS);
 
     }
 }

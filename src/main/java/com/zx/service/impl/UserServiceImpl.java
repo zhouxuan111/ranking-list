@@ -8,6 +8,7 @@ import com.zx.service.UserService;
 import com.zx.util.RedisUtils;
 import com.zx.util.ScoreUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;*/
 
     @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
     private RedisUtils redisUtils;
 
     @Override
@@ -31,6 +35,7 @@ public class UserServiceImpl implements UserService {
             double score = ScoreUtil.getScore(user.getScore(), new Date());
             redisUtils.zadd(RedisKeyConstants.INTEGRAL_SORT_KEY, user.getUserId(), score);
         }
+        redisUtils.expire(RedisKeyConstants.INTEGRAL_SORT_KEY);
     }
 
     @Override
@@ -43,6 +48,7 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
         // userDao.update(user);
         //不存在直接新增，若存在直接根据userId和key更新
+        Double score = redisUtils.zScore(RedisKeyConstants.INTEGRAL_SORT_KEY, user.getUserId());
         redisUtils.zadd(RedisKeyConstants.INTEGRAL_SORT_KEY, user.getUserId(),
                 ScoreUtil.getScore(user.getScore(), new Date()));
 

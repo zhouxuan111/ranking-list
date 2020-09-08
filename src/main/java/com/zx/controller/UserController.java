@@ -43,4 +43,7 @@ public class UserController {
         redisUtils.zadd(RedisKeyConstants.INTEGRAL_SORT_KEY, set);*/
     }
 
+    @GetMapping("testTimeOut")
+    public void testTimeOut() {
+    }
 }
